@@ -1,7 +1,16 @@
+buildscript {
+    ext.compose_version = "1.6.6"
+    ext.library_version = "0.5.0"
+    ext.kotlin_version = "1.9.23"
+}
+
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'maven-publish'
+
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.kotlin.compose
 }
 
 android {
