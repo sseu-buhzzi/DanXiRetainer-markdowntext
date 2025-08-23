@@ -16,7 +16,6 @@ import io.noties.markwon.image.AsyncDrawable
 import io.noties.markwon.image.AsyncDrawableLoader
 import io.noties.markwon.image.AsyncDrawableScheduler
 import io.noties.markwon.image.DrawableUtils
-import io.noties.markwon.image.ImageSpanFactory
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ImagesPlugin private constructor(
@@ -29,7 +28,11 @@ class ImagesPlugin private constructor(
 ) : AbstractMarkwonPlugin() {
 
     override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
-        builder.setFactory(org.commonmark.node.Image::class.java, ImageSpanFactory())
+        builder.setFactory(
+            org.commonmark.node.Image::class.java,
+            // optional TODO make height configurable in settings
+            FixedHeightImageSpanFactory(512),
+        )
     }
 
     override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
