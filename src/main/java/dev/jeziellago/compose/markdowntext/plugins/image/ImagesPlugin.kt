@@ -26,16 +26,11 @@ class ImagesPlugin private constructor(
         coilStore,
         imageLoader
     ),
-    private val imageHeight: Int? = null,
+    private val imageSpanFactory: ImageSpanFactory? = null,
 ) : AbstractMarkwonPlugin() {
 
     override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
-        builder.setFactory(
-            org.commonmark.node.Image::class.java,
-            imageHeight
-                ?.let { FixedHeightImageSpanFactory(it) }
-                ?: ImageSpanFactory(),
-        )
+        builder.setFactory(org.commonmark.node.Image::class.java, imageSpanFactory ?: ImageSpanFactory())
     }
 
     override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
@@ -57,7 +52,7 @@ class ImagesPlugin private constructor(
             context: Context,
             imageLoader: ImageLoader,
             imageRequestBuilder: ImageRequest.Builder.() -> Unit,
-            imageHeight: Int? = null,
+            imageSpanFactory: ImageSpanFactory?,
         ): ImagesPlugin {
             val coilStore = object : CoilStore {
                 override fun load(drawable: AsyncDrawable): ImageRequest {
@@ -71,7 +66,7 @@ class ImagesPlugin private constructor(
                     disposable.dispose()
                 }
             }
-            return ImagesPlugin(imageLoader, coilStore, imageHeight = imageHeight)
+            return ImagesPlugin(imageLoader, coilStore, imageSpanFactory = imageSpanFactory)
         }
 
         class AnimatedImageDrawableLoader(

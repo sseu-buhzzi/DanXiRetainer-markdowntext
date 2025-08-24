@@ -25,6 +25,7 @@ import androidx.core.widget.TextViewCompat
 import coil.ImageLoader
 import coil.request.ImageRequest
 import io.noties.markwon.Markwon
+import io.noties.markwon.image.ImageSpanFactory
 
 @Composable
 fun MarkdownText(
@@ -44,8 +45,7 @@ fun MarkdownText(
     disableLinkMovementMethod: Boolean = false,
     imageLoader: ImageLoader? = null,
     imageRequestBuilder: ImageRequest.Builder.() -> Unit = { },
-    // Constrains images to the height, `null` for no constraint.
-    imageHeight: Int? = null,
+    imageSpanFactory: ImageSpanFactory? = null,
     linkifyMask: Int = Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS or Linkify.WEB_URLS,
     enableSoftBreakAddsNewLine: Boolean = true,
     syntaxHighlightColor: Color = Color.LightGray,
@@ -66,7 +66,7 @@ fun MarkdownText(
                 context,
                 imageLoader,
                 imageRequestBuilder,
-                imageHeight,
+                imageSpanFactory,
                 linkifyMask,
                 enableSoftBreakAddsNewLine,
                 syntaxHighlightColor,

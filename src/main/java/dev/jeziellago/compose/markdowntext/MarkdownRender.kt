@@ -23,6 +23,7 @@ import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tables.TablePlugin
 import io.noties.markwon.ext.tasklist.TaskListPlugin
 import io.noties.markwon.html.HtmlPlugin
+import io.noties.markwon.image.ImageSpanFactory
 import io.noties.markwon.linkify.LinkifyPlugin
 
 internal object MarkdownRender {
@@ -31,7 +32,7 @@ internal object MarkdownRender {
         context: Context,
         imageLoader: ImageLoader?,
         imageRequestBuilder: ImageRequest.Builder.() -> Unit,
-        imageHeight: Int?,
+        imageSpanFactory: ImageSpanFactory?,
         linkifyMask: Int,
         enableSoftBreakAddsNewLine: Boolean,
         syntaxHighlightColor: Color,
@@ -62,7 +63,7 @@ internal object MarkdownRender {
                 )
             )
             .usePlugin(HtmlPlugin.create())
-            .usePlugin(ImagesPlugin.create(context, coilImageLoader, imageRequestBuilder, imageHeight))
+            .usePlugin(ImagesPlugin.create(context, coilImageLoader, imageRequestBuilder, imageSpanFactory))
             .usePlugin(StrikethroughPlugin.create())
             .usePlugin(TablePlugin.create(context))
             .usePlugin(LinkifyPlugin.create(linkifyMask))
