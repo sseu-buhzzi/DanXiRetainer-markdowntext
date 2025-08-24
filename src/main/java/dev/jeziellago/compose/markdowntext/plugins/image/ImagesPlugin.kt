@@ -16,6 +16,7 @@ import io.noties.markwon.image.AsyncDrawable
 import io.noties.markwon.image.AsyncDrawableLoader
 import io.noties.markwon.image.AsyncDrawableScheduler
 import io.noties.markwon.image.DrawableUtils
+import io.noties.markwon.image.ImageSpanFactory
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ImagesPlugin private constructor(
@@ -24,14 +25,16 @@ class ImagesPlugin private constructor(
     private val imageDrawableLoader: AnimatedImageDrawableLoader = AnimatedImageDrawableLoader(
         coilStore,
         imageLoader
-    )
+    ),
+    private val imageHeight: Int? = null,
 ) : AbstractMarkwonPlugin() {
 
     override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
         builder.setFactory(
             org.commonmark.node.Image::class.java,
-            // optional TODO make height configurable in settings
-            FixedHeightImageSpanFactory(512),
+            imageHeight
+                ?.let { FixedHeightImageSpanFactory(it) }
+                ?: ImageSpanFactory(),
         )
     }
 
@@ -50,7 +53,7 @@ class ImagesPlugin private constructor(
     companion object {
         private val cache: HashMap<AsyncDrawable, Disposable> = HashMap(2)
 
-        fun create(context: Context, imageLoader: ImageLoader): ImagesPlugin {
+        fun create(context: Context, imageLoader: ImageLoader, imageHeight: Int? = null): ImagesPlugin {
             val coilStore = object : CoilStore {
                 override fun load(drawable: AsyncDrawable): ImageRequest {
                     return ImageRequest.Builder(context)
@@ -62,7 +65,7 @@ class ImagesPlugin private constructor(
                     disposable.dispose()
                 }
             }
-            return ImagesPlugin(imageLoader, coilStore)
+            return ImagesPlugin(imageLoader, coilStore, imageHeight = imageHeight)
         }
 
         class AnimatedImageDrawableLoader(

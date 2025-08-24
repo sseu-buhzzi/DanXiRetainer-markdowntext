@@ -42,6 +42,8 @@ fun MarkdownText(
     // it also enable the parent view to receive the click event
     disableLinkMovementMethod: Boolean = false,
     imageLoader: ImageLoader? = null,
+    // Constrains images to the height, `null` for no constraint.
+    imageHeight: Int? = null,
     linkifyMask: Int = Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS or Linkify.WEB_URLS,
     enableSoftBreakAddsNewLine: Boolean = true,
     syntaxHighlightColor: Color = Color.LightGray,
@@ -61,6 +63,7 @@ fun MarkdownText(
             MarkdownRender.create(
                 context,
                 imageLoader,
+                imageHeight,
                 linkifyMask,
                 enableSoftBreakAddsNewLine,
                 syntaxHighlightColor,
