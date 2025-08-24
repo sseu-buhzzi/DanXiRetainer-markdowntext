@@ -10,6 +10,7 @@ import androidx.compose.ui.text.TextStyle
 import coil.ImageLoader
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
+import coil.request.ImageRequest
 import dev.jeziellago.compose.markdowntext.plugins.core.MardownCorePlugin
 import dev.jeziellago.compose.markdowntext.plugins.image.ImagesPlugin
 import dev.jeziellago.compose.markdowntext.plugins.syntaxhighlight.SyntaxHighlightPlugin
@@ -29,6 +30,7 @@ internal object MarkdownRender {
     fun create(
         context: Context,
         imageLoader: ImageLoader?,
+        imageRequestBuilder: ImageRequest.Builder.() -> Unit,
         imageHeight: Int?,
         linkifyMask: Int,
         enableSoftBreakAddsNewLine: Boolean,
@@ -60,7 +62,7 @@ internal object MarkdownRender {
                 )
             )
             .usePlugin(HtmlPlugin.create())
-            .usePlugin(ImagesPlugin.create(context, coilImageLoader, imageHeight))
+            .usePlugin(ImagesPlugin.create(context, coilImageLoader, imageRequestBuilder, imageHeight))
             .usePlugin(StrikethroughPlugin.create())
             .usePlugin(TablePlugin.create(context))
             .usePlugin(LinkifyPlugin.create(linkifyMask))
