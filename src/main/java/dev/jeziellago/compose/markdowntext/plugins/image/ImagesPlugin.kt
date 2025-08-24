@@ -25,11 +25,12 @@ class ImagesPlugin private constructor(
     private val imageDrawableLoader: AnimatedImageDrawableLoader = AnimatedImageDrawableLoader(
         coilStore,
         imageLoader
-    )
+    ),
+    private val imageSpanFactory: ImageSpanFactory? = null,
 ) : AbstractMarkwonPlugin() {
 
     override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
-        builder.setFactory(org.commonmark.node.Image::class.java, ImageSpanFactory())
+        builder.setFactory(org.commonmark.node.Image::class.java, imageSpanFactory ?: ImageSpanFactory())
     }
 
     override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
@@ -47,11 +48,17 @@ class ImagesPlugin private constructor(
     companion object {
         private val cache: HashMap<AsyncDrawable, Disposable> = HashMap(2)
 
-        fun create(context: Context, imageLoader: ImageLoader): ImagesPlugin {
+        fun create(
+            context: Context,
+            imageLoader: ImageLoader,
+            imageRequestBuilder: ImageRequest.Builder.() -> Unit,
+            imageSpanFactory: ImageSpanFactory?,
+        ): ImagesPlugin {
             val coilStore = object : CoilStore {
                 override fun load(drawable: AsyncDrawable): ImageRequest {
                     return ImageRequest.Builder(context)
                         .data(drawable.destination)
+                        .apply(imageRequestBuilder)
                         .build()
                 }
 
@@ -59,7 +66,7 @@ class ImagesPlugin private constructor(
                     disposable.dispose()
                 }
             }
-            return ImagesPlugin(imageLoader, coilStore)
+            return ImagesPlugin(imageLoader, coilStore, imageSpanFactory = imageSpanFactory)
         }
 
         class AnimatedImageDrawableLoader(

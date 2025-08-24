@@ -10,6 +10,7 @@ import androidx.compose.ui.text.TextStyle
 import coil.ImageLoader
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
+import coil.request.ImageRequest
 import dev.jeziellago.compose.markdowntext.plugins.core.MardownCorePlugin
 import dev.jeziellago.compose.markdowntext.plugins.image.ImagesPlugin
 import dev.jeziellago.compose.markdowntext.plugins.syntaxhighlight.SyntaxHighlightPlugin
@@ -22,6 +23,7 @@ import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tables.TablePlugin
 import io.noties.markwon.ext.tasklist.TaskListPlugin
 import io.noties.markwon.html.HtmlPlugin
+import io.noties.markwon.image.ImageSpanFactory
 import io.noties.markwon.linkify.LinkifyPlugin
 
 internal object MarkdownRender {
@@ -29,6 +31,8 @@ internal object MarkdownRender {
     fun create(
         context: Context,
         imageLoader: ImageLoader?,
+        imageRequestBuilder: ImageRequest.Builder.() -> Unit,
+        imageSpanFactory: ImageSpanFactory?,
         linkifyMask: Int,
         enableSoftBreakAddsNewLine: Boolean,
         syntaxHighlightColor: Color,
@@ -59,7 +63,7 @@ internal object MarkdownRender {
                 )
             )
             .usePlugin(HtmlPlugin.create())
-            .usePlugin(ImagesPlugin.create(context, coilImageLoader))
+            .usePlugin(ImagesPlugin.create(context, coilImageLoader, imageRequestBuilder, imageSpanFactory))
             .usePlugin(StrikethroughPlugin.create())
             .usePlugin(TablePlugin.create(context))
             .usePlugin(LinkifyPlugin.create(linkifyMask))
