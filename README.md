@@ -1,3 +1,7 @@
+## Forked from [jeziellago/compose-markdown](https://github.com/jeziellago/compose-markdown)
+
+This repository contains a modified version of `markdowntext` from the original project.
+
 # MarkdownText - Jetpack Compose
 [![](https://androidweekly.net/issues/issue-456/badge)](https://androidweekly.net/issues/issue-456)
 [![Android CI](https://github.com/jeziellago/compose-markdown/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jeziellago/compose-markdown/actions/workflows/ci.yml) [![](https://jitpack.io/v/jeziellago/compose-markdown.svg)](https://jitpack.io/#jeziellago/compose-markdown)
